@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-TARGET = my_logger 
+TARGET = tester 
 
 CONFIG -= qt
 

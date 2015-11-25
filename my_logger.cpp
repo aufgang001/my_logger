@@ -42,7 +42,7 @@ std::string my_logger::get_log_folder() const
 
 std::string my_logger::get_log_file_name(const std::string& file_name_suffix) const
 {
-    return  m_log_folder + m_host_name + "_" + file_name_suffix;
+    return  m_log_folder + m_host_name + "_" + file_name_suffix + ".my_logfile";
 }
 
 void my_logger::log(const std::string& file_name_suffix, const std::string& action, const std::string& description)

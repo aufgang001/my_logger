@@ -41,7 +41,6 @@ private:
     std::string get_log_file_name(const std::string& file_name_suffix) const;
 
     bool m_ipc_save;
-    std::chrono::time_point<std::chrono::steady_clock> m_logger_start;
     std::string m_host_name;
     std::string m_log_folder;
     int m_counter;

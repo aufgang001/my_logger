@@ -6,7 +6,6 @@
 
 my_logger::my_logger(bool set_ipc_save)
     : m_ipc_save(set_ipc_save)
-    , m_logger_start(std::chrono::steady_clock::now())
     , m_host_name(get_host_name())
     , m_log_folder(get_log_folder())
     , m_counter(0)
@@ -15,7 +14,6 @@ my_logger::my_logger(bool set_ipc_save)
 
 my_logger::my_logger(const std::string& host_name, const std::string& log_folder, bool set_ipc_save)
     : m_ipc_save(set_ipc_save)
-    , m_logger_start(std::chrono::steady_clock::now())
     , m_host_name(host_name)
     , m_log_folder(log_folder)
     , m_counter(0)
@@ -50,7 +48,7 @@ void my_logger::log(const std::string& file_name_suffix, const std::string& acti
     if (!m_log_folder.empty() && !m_host_name.empty()) {
         std::stringstream content;
 
-        std::string current_time = std::to_string(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - m_logger_start).count());
+        std::string current_time = std::to_string(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count());
         content << m_counter++ << ";" << current_time << ";" << action << ";" << description;
 
         auto it = m_log_files.find(file_name_suffix);

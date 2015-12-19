@@ -48,7 +48,7 @@ void my_logger::log(const std::string& file_name_suffix, const std::string& acti
     if (!m_log_folder.empty() && !m_host_name.empty()) {
         std::stringstream content;
 
-        std::string current_time = std::to_string(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count());
+        std::string current_time = std::to_string(std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count());
         content << m_counter++ << ";" << current_time << ";" << action << ";" << description;
 
         auto it = m_log_files.find(file_name_suffix);

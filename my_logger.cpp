@@ -1,8 +1,5 @@
 #include "my_logger.hpp"
 
-#include <iostream>
-#include <fstream>
-#include <sstream>
 
 my_logger::my_logger(bool set_ipc_save)
     : m_ipc_save(set_ipc_save)
@@ -43,32 +40,9 @@ std::string my_logger::get_log_file_name(const std::string& file_name_suffix) co
     return  m_log_folder + m_host_name + "_" + file_name_suffix + ".my_logfile";
 }
 
-void my_logger::log(const std::string& file_name_suffix, const std::string& action, const std::string& description)
-{
-    if (!m_log_folder.empty() && !m_host_name.empty()) {
-        std::stringstream content;
 
-        std::string current_time = std::to_string(std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count());
-        content << m_counter++ << ";" << current_time << ";" << action << ";" << description;
 
-        auto it = m_log_files.find(file_name_suffix);
-        if (it == m_log_files.end()) {
-            try {
-                auto lprops = std::make_shared<log_props>(this, file_name_suffix);
-                lprops->write_to_file(content);
-                m_log_files.insert({file_name_suffix, lprops});
-            } catch (boost::interprocess::interprocess_exception& ex) {
-                std::cout << "ipc error: " << ex.what() << std::endl;
-                exit(0);
-            }
-
-        } else {
-            it->second->write_to_file(content);
-        }
-    }
-}
-
-///////////////////////////////////////////////
+/////////////////////////////////////////////////
 // log_props
 ///////////////////////////////////////////////
 
@@ -96,7 +70,6 @@ my_logger::log_props::~log_props()
 
 void my_logger::log_props::write_to_file(const std::stringstream& content)
 {
-    //todo sync stuff
     if (m_can_log) {
         if (m_my_logger->m_ipc_save) {
             m_mutex.lock();
@@ -111,5 +84,5 @@ void my_logger::log_props::write_to_file(const std::stringstream& content)
 }
 
 std::string my_logger::log_props::get_mutex_name() const{
-    return m_file_name_suffix + m_my_logger->m_host_name;
+    return m_my_logger->m_host_name + "_" + m_file_name_suffix;
 }
